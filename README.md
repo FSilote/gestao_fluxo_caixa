@@ -5,7 +5,7 @@ Nesse repositório você encontrará o projeto proposto para o desafio de arquit
 ## Sumário
 
 - Introdução (arquitetura de negócios)
-- Arquitetura de Soluções (e possíveis AT's)
+- Arquitetura de Soluções
 - Arquitetura de Tecnologia
 - Arquitetura de Software
 - Como executar esse projeto
@@ -64,4 +64,22 @@ Na segunda fase do processo de expansão, capacidades estratégicas como "Transf
 
 ## Arquitetura de Soluções
 
+Versão 1) A arquitetura de soluções proposta para a primeira versão desse projeto utiliza um load balancer externo que será responsável por rotear o tráfego das requisições feitas pela aplicação cliente para o cluster de aplicação que estará disponível em uma subrede privada. Esse load balancer será acionado por um proxy reverso que atua juntamente com uma camada de WAF e CDN.
+
 ![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_solucoes_v3.png)
+
+Versão 2) A segunda versão da arquitetura de soluções apresenta uma evolução da versão inicial. Nesse modelo, assumimos que nosso cliente atuará com diferentes aplicações clientes, tais como Mobile e Web. Nesse caso, substituímos o balanceador externo por um API Gateway e utilizamos o balanceador interno para receber as chamadas que forem repassadas pelo API Gateway.
+
+![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_solucoes_v2.png)
+
+Versão 3) A versão número 3 apresenta uma proposta de utilização de BFF's para as aplicações cliente. Essa camada de BFF acionará um load balancer interno que é responsável por direcionar as requisições dos BFF aos serviços correspondentes.
+
+![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_solucoes_v1.png)
+
+## Arquitetura de Tecnologia
+
+![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_tecnologia.png)
+
+## Arquitetura de software
+
+## Como executar esse projeto
