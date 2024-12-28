@@ -78,8 +78,28 @@ Versão 3) A versão número 3 apresenta uma proposta de utilização de BFF's p
 
 ## Arquitetura de Tecnologia
 
+A arquitetura de tecnologia proposta contempla a arquitetura de aplicações e a arquitetura de dados. Essas arquiteturas serão implementadas no provedor de Cloud AWS.
+
 ![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_tecnologia.png)
 
 ## Arquitetura de software
 
 ## Como executar esse projeto
+
+1) Executar pelo Visual Studio (ou outra IDE)
+
+- Faça clone desse projeto em seu computador
+- Certifique-se de que possui o docker instalado
+- Certifique-se de que possui o Visual Studio instalado, ou .NET SDK com runtime para NET8.
+- Execute o comando a seguir para inicializer um container de RabbitMQ: docker container run -d -it --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0.5-management
+- Abra o arquivo CodeChallenger.sln no Visual Studio
+- Faça um Clean e Rebuild da solução
+- Execute a solução (F5)
+- Identifique o Swagger da aplicação "Lançamentos"
+- Faça Login utilizando o endpoint auth/login (user: test@test.com | senha: 123456)
+- Autentique no Swagger utilizando o token recebido no passo anterior
+- Execute as rotas de POST para realizar lançamentos (à vista ou parcelados)
+- Identifique o Swagger da aplicação "Saldo"
+- Execute as rotas de relatório de Saldos
+
+2) Docker Compose
