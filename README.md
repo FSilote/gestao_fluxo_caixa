@@ -91,7 +91,10 @@ A arquitetura de tecnologia proposta contempla a arquitetura de aplicações e a
 - Faça clone desse projeto em seu computador
 - Certifique-se de que possui o docker instalado
 - Certifique-se de que possui o Visual Studio instalado, ou .NET SDK com runtime para NET8.
-- Execute o comando a seguir para inicializer um container de RabbitMQ: docker container run -d -it --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0.5-management
+- Execute o comando a seguir para inicializer um container de RabbitMQ:
+```
+docker container run -d -it --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:4.0.5-management
+```
 - Abra o arquivo CodeChallenger.sln no Visual Studio
 - Faça um Clean e Rebuild da solução
 - Execute a solução (F5)
