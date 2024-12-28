@@ -64,6 +64,4 @@ Na segunda fase do processo de expansão, capacidades estratégicas como "Transf
 
 ## Arquitetura de Soluções
 
-```
-![image info](./assets/arq_solucoes_v3)
-```
+![alt text](https://github.com/FSilote/gestao_fluxo_caixa/blob/main/assets/arq_solucoes_v3.png)
