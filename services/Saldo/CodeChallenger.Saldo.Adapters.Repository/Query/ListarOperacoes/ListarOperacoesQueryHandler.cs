@@ -1,5 +1,6 @@
 ﻿namespace CodeChallenger.Saldo.Adapters.Repository.Query.ListarOperacoes
 {
+    using CodeChallenger.Lancamentos.Application.UseCases.RecuperarRelatorioLancamentosDiario;
     using CodeChallenger.Saldo.Application.UseCases.ListarOperacoes;
     using CodeChallenger.Saldo.Domain.Entity;
     using CodeChallenger.Saldo.Domain.Repository;

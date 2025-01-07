@@ -1,6 +1,7 @@
 namespace CodeChallenger.Saldo.WebApi.Controllers
 {
     using Asp.Versioning;
+    using CodeChallenger.Lancamentos.Application.UseCases.RecuperarRelatorioLancamentosDiario;
     using CodeChallenger.Saldo.Application.UseCases.ListarOperacoes;
     using CodeChallenger.Saldo.Application.UseCases.RecuperarOperacao;
     using CodeChallenger.Saldo.Domain.Entity;
