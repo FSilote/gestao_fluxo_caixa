@@ -43,6 +43,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenger.Saldo.Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenger.Saldo.WebApi", "services\Saldo\CodeChallenger.Saldo.WebApi\CodeChallenger.Saldo.WebApi.csproj", "{4D8E0524-0728-4667-9CFD-3ABFD30DCE94}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "config", "config", "{D4C35FAE-DFE7-44F9-9B9E-8C53F1F4D6E4}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

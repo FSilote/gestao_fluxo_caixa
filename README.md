@@ -97,9 +97,10 @@ docker container run -d -it --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq
 ```
 - Abra o arquivo CodeChallenger.sln no Visual Studio
 - Faça um Clean e Rebuild da solução
+- Configure a solução para executar mais de um projeto ao mesmo tempo (Clique com o Botão direito na solução -> Configure Startup Projects -> Marque os dois projetos WebApi como iniciais).
 - Execute a solução (F5)
 - Identifique o Swagger da aplicação "Lançamentos"
-- Faça Login utilizando o endpoint auth/login (user: test@test.com | senha: 123456)
+- Faça Login utilizando o endpoint auth/login (user: gerente@teste.com ou atendente@teste.com | senha: teste)
 - Autentique no Swagger utilizando o token recebido no passo anterior
 - Execute as rotas de POST para realizar lançamentos (à vista ou parcelados)
 - Identifique o Swagger da aplicação "Saldo"
