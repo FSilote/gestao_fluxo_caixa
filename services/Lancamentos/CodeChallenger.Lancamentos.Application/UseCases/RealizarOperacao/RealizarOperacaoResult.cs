@@ -7,6 +7,6 @@
         public int Id { get; set; }
         public decimal Valor { get; set; }
         public Guid Identificador { get; set; }
-        public DateTime DataRealizacao { get; set; }
+        public DateTime? DataRealizacao { get; set; }
     }
 }

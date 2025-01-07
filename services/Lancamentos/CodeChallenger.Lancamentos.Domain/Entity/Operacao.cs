@@ -6,12 +6,14 @@
     {
         public virtual decimal ValorTotal { get; protected set; }
         public virtual Movimento Movimento { get; protected set; }
+        public virtual StatusOperacao Status { get; protected set; }
         public virtual Guid Identificador { get; protected set; } = Guid.NewGuid();
         public virtual int TotalParcelas { get; protected set; } = 1;
         public virtual int NumeroParcela { get; protected set; } = 1;
         public virtual decimal ValorParcela { get; protected set; } = decimal.Zero;
-        public virtual DateTime DataRealizacao { get; protected set; }
-        public virtual string? Comentario { get; protected set; }
+        public virtual DateTime DataPrevista { get; protected set; }
+        public virtual DateTime? DataRealizacao { get; protected set; }
+        public virtual string? Descricao { get; protected set; }
 
         #region Setters
 
@@ -27,15 +29,27 @@
             return this;
         }
 
-        public Operacao SetDataRealizacao(DateTime data)
+        public Operacao SetStatus(StatusOperacao status)
+        {
+            this.Status = status;
+            return this;
+        }
+
+        public Operacao SetDataPrevista(DateTime data)
+        {
+            this.DataPrevista = data;
+            return this;
+        }
+
+        public Operacao SetDataRealizacao(DateTime? data)
         {
             this.DataRealizacao = data;
             return this;
         }
 
-        public Operacao SetComentario(string? comentario)
+        public Operacao SetDescricao(string? descricao)
         {
-            this.Comentario = comentario;
+            this.Descricao = descricao;
             return this;
         }
 
@@ -68,7 +82,7 @@
         #region Support
 
         public static IEnumerable<Operacao> DefinirOperacesParceladas(decimal valorTotal, Movimento movimento,
-            DateTime data, int numeroDeParcelas, string? comentario)
+            DateTime data, int numeroDeParcelas, string? descricao)
         {
             var identificador = Guid.NewGuid();
             var valorParcela = decimal.Round (valorTotal / numeroDeParcelas, 2);
@@ -77,13 +91,15 @@
                 .Range(1, numeroDeParcelas)
                 .Select(x => new Operacao()
                     .SetNumeroParcela(x)
-                    .SetComentario(comentario)
-                    .SetDataRealizacao(data.AddMonths(x - 1))
+                    .SetDescricao($"{descricao} - {x}/{numeroDeParcelas}")
+                    .SetDataRealizacao(x == 1 ? data : null!)
+                    .SetDataPrevista(data.AddMonths(x - 1))
                     .SetIdentificador(identificador)
                     .SetMovimento(movimento)
                     .SetTotalParcelas(numeroDeParcelas)
                     .SetValorParcela(valorParcela)
-                    .SetValorTotal(valorTotal));
+                    .SetValorTotal(valorTotal)
+                    .SetStatus(x == 1 ? StatusOperacao.EFETIVADO : StatusOperacao.PREVISTO));
 
             var somaParcelas = parcelas.Sum(x => x.ValorParcela);
             

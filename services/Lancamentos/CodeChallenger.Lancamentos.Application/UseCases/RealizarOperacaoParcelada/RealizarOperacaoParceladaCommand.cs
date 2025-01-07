@@ -9,7 +9,7 @@
         public Movimento Movimento { get; private set; }
         public int TotalParcelas { get; protected set; }
         public DateTime DataPrimeiraParcela { get; protected set; }
-        public string? Comentario { get; protected set; }
+        public string? Descricao { get; protected set; }
 
         public RealizarOperacaoParceladaCommand SetMovimentoOperacao(Movimento movimento)
         {

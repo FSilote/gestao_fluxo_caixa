@@ -6,7 +6,7 @@
     public class RealizarOperacaoCommand : IRequest<RealizarOperacaoResult>
     {
         public decimal Valor { get; set; }
-        public string? Comentario { get; set; }
+        public string? Descricao { get; set; }
         public Categoria Categoria { get; protected set; }
         public DateTime Data {  get; set; }
         

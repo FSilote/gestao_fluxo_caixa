@@ -32,10 +32,7 @@ app.ConfigureMvc();
 app.ConfigureAuthentication();
 app.ConfigureEndpoints();
 // app.ConfigureSwagger();
-// 
-// app.Run();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

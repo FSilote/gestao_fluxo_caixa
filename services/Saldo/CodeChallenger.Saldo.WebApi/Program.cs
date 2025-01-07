@@ -1,3 +1,6 @@
+using CodeChallenger.Saldo.Adapters.Repository.Seed;
+using CodeChallenger.Saldo.Domain.Encryption;
+using CodeChallenger.Saldo.Domain.Repository;
 using CodeChallenger.Saldo.WebApi.AppStart.Middlewares;
 using CodeChallenger.Saldo.WebApi.AppStart.Services;
 
@@ -31,14 +34,20 @@ app.ConfigureMvc();
 app.ConfigureAuthentication();
 app.ConfigureEndpoints();
 // app.ConfigureSwagger();
-// 
-// app.Run();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var writeRepository = scope.ServiceProvider.GetRequiredService<IWriteRepository>();
+        var sha512Service = scope.ServiceProvider.GetRequiredService<ISha512Service>();
+
+        var seeder = new DataSeeder(writeRepository, sha512Service);
+        await seeder.SeedData();
+    }
 }
 
 app.Run();

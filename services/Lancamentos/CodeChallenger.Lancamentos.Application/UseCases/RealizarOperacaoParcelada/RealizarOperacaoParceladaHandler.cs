@@ -28,7 +28,7 @@
         public async Task<IEnumerable<RealizarOperacaoParceladaResult>> Handle(RealizarOperacaoParceladaCommand request, CancellationToken cancellationToken)
         {
             var parcelas = Operacao.DefinirOperacesParceladas(request.Valor, request.Movimento, 
-                request.DataPrimeiraParcela, request.TotalParcelas, request.Comentario);
+                request.DataPrimeiraParcela, request.TotalParcelas, request.Descricao);
 
             var events = new List<OperacaoRegistradaEvent>();
 
@@ -39,15 +39,17 @@
                 events.Add(new OperacaoRegistradaEvent
                 {
                     Id = parcela.Id,
-                    Comentario = parcela.Comentario,
+                    Comentario = parcela.Descricao,
                     TotalParcelas = parcela.TotalParcelas,
                     DataCriacao = parcela.DataCriacao,
                     DataRealizacao = parcela.DataRealizacao,
+                    DataPrevista = parcela.DataPrevista,
                     Identificador = parcela.Identificador,
                     Movimento = parcela.Movimento,
                     NumeroParcela = parcela.NumeroParcela,
                     ValorParcela = parcela.ValorParcela,
-                    ValorTotal = parcela.ValorTotal
+                    ValorTotal = parcela.ValorTotal,
+                    Status = parcela.Status,
                 });
             }
 
@@ -58,6 +60,7 @@
 
             return parcelas.Select(x => new RealizarOperacaoParceladaResult
             {
+                DataPrevista = x.DataPrevista,
                 DataRealizacao = x.DataRealizacao,
                 Id = x.Id,
                 Identificador = x.Identificador,

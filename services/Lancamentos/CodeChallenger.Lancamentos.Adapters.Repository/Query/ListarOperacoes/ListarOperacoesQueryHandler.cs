@@ -23,16 +23,18 @@
                             && (request.ComParcelamento.HasValue || r.NumeroParcela > 1)
                             && (request.DataInicio.HasValue || r.DataRealizacao >= request.DataInicio)
                             && (request.DataTermino.HasValue || r.DataRealizacao <= request.DataTermino)
-                            && (string.IsNullOrEmpty(request.Comentario)|| r.Comentario.Contains(request.Comentario))
+                            && (string.IsNullOrEmpty(request.Descricao)|| r.Descricao.Contains(request.Descricao))
                           select new ListarOperacoesQueryResult
                           {
-                              Comentario = r.Comentario ?? null!,
+                              Descricao = r.Descricao ?? null!,
                               DataCriacao = r.DataCriacao,
+                              DataPrevista = r.DataPrevista,
                               DataRealizacao = r.DataRealizacao,
                               Id = r.Id,
                               Identificador = r.Identificador,
                               Movimento = r.Movimento,
                               NumeroParcela = r.NumeroParcela,
+                              Status = r.Status,
                               TotalParcelas = r.TotalParcelas,
                               ValorParcela = r.ValorParcela,
                               ValorTotal = r.ValorTotal

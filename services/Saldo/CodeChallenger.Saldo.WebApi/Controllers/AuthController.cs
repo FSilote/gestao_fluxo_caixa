@@ -1,18 +1,11 @@
-using Asp.Versioning;
-using CodeChallenger.Saldo.Application.UseCases.ExcluirOperacao;
-using CodeChallenger.Saldo.Application.UseCases.ListarOperacoes;
-using CodeChallenger.Saldo.Application.UseCases.Login;
-using CodeChallenger.Saldo.Application.UseCases.RealizarOperacao;
-using CodeChallenger.Saldo.Application.UseCases.RealizarOperacaoParcelada;
-using CodeChallenger.Saldo.Application.UseCases.RecuperarOperacao;
-using CodeChallenger.Saldo.Domain.Entity;
-using CodeChallenger.Saldo.Domain.Exceptions;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 namespace CodeChallenger.Saldo.WebApi.Controllers
 {
+    using Asp.Versioning;
+    using CodeChallenger.Saldo.Application.UseCases.Login;
+    using MediatR;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     [ApiController]
     [ApiVersion("1.0")]
     //[Route("v{version:apiVersion}/[controller]")]

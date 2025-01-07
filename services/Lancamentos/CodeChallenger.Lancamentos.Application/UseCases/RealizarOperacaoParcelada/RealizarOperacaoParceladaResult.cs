@@ -10,6 +10,7 @@
         public int TotalParcelas { get; set; }
         public int NumeroParcela { get; set; }
         public decimal ValorParcela { get; set; }
-        public DateTime DataRealizacao { get; set; }
+        public DateTime DataPrevista { get; set; }
+        public DateTime? DataRealizacao { get; set; }
     }
 }

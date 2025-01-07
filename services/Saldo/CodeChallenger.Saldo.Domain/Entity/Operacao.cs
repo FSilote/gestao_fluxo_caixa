@@ -1,17 +1,23 @@
 ﻿namespace CodeChallenger.Saldo.Domain.Entity
 {
+    using CodeChallenger.Lancamentos.Domain.Entity;
     using System;
 
     public class Operacao : AbstractBaseEntity
     {
         public virtual decimal ValorTotal { get; protected set; }
         public virtual Movimento Movimento { get; protected set; }
+        public virtual StatusOperacao Status { get; protected set; }
         public virtual Guid Identificador { get; protected set; } = Guid.NewGuid();
         public virtual int TotalParcelas { get; protected set; } = 1;
         public virtual int NumeroParcela { get; protected set; } = 1;
         public virtual decimal ValorParcela { get; protected set; } = decimal.Zero;
-        public virtual DateTime DataRealizacao { get; protected set; }
-        public virtual string? Comentario { get; protected set; }
+        public virtual DateTime DataPrevista { get; protected set; }
+        public virtual DateTime? DataRealizacao { get; protected set; }
+        public virtual string? Descricao { get; protected set; }
+
+        public virtual DateTime? DataAlteracao { get; protected set; }
+        public virtual int IdIntegracao { get; protected set; }
 
         #region Setters
 
@@ -27,15 +33,27 @@
             return this;
         }
 
-        public Operacao SetDataRealizacao(DateTime data)
+        public Operacao SetStatus(StatusOperacao status)
+        {
+            this.Status = status;
+            return this;
+        }
+
+        public Operacao SetDataPrevista(DateTime data)
+        {
+            this.DataPrevista = data;
+            return this;
+        }
+
+        public Operacao SetDataRealizacao(DateTime? data)
         {
             this.DataRealizacao = data;
             return this;
         }
 
-        public Operacao SetComentario(string? comentario)
+        public Operacao SetDescricao(string? descricao)
         {
-            this.Comentario = comentario;
+            this.Descricao = descricao;
             return this;
         }
 
@@ -63,37 +81,16 @@
             return this;
         }
 
-        #endregion
-
-        #region Support
-
-        public static IEnumerable<Operacao> DefinirOperacesParceladas(decimal valorTotal, Movimento movimento,
-            DateTime data, int numeroDeParcelas, string? comentario)
+        public Operacao SetIdIntegracao(int idIntegracao)
         {
-            var identificador = Guid.NewGuid();
-            var valorParcela = decimal.Round (valorTotal / numeroDeParcelas, 2);
-            
-            var parcelas = Enumerable
-                .Range(1, numeroDeParcelas)
-                .Select(x => new Operacao()
-                    .SetNumeroParcela(x)
-                    .SetComentario(comentario)
-                    .SetDataRealizacao(data.AddMonths(x - 1))
-                    .SetIdentificador(identificador)
-                    .SetMovimento(movimento)
-                    .SetTotalParcelas(numeroDeParcelas)
-                    .SetValorParcela(valorParcela)
-                    .SetValorTotal(valorTotal));
+            this.IdIntegracao = idIntegracao;
+            return this;
+        }
 
-            var somaParcelas = parcelas.Sum(x => x.ValorParcela);
-            
-            var ultimaParcela = somaParcelas > valorTotal
-                ? valorParcela - (somaParcelas - valorTotal)
-                : valorParcela + (valorTotal - somaParcelas);
-
-            parcelas.LastOrDefault()?.SetValorParcela(ultimaParcela);
-
-            return parcelas;
+        public Operacao SetDataAlteracao(DateTime dataAlteracao)
+        {
+            this.DataAlteracao = dataAlteracao;
+            return this;
         }
 
         #endregion

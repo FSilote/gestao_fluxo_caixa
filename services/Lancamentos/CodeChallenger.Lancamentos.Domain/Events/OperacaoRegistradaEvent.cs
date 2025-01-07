@@ -14,7 +14,9 @@
         public bool OperacaoParcelada => this.TotalParcelas > 1;
         public int NumeroParcela { get; set; }
         public decimal ValorParcela { get; set; }
-        public DateTime DataRealizacao { get; set; }
+        public DateTime DataPrevista { get; set; }
+        public DateTime? DataRealizacao { get; set; }
         public string? Comentario { get; set; }
+        public StatusOperacao Status { get; set; }
     }
 }

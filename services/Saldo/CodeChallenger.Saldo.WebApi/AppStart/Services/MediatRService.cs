@@ -1,8 +1,7 @@
 ﻿namespace CodeChallenger.Saldo.WebApi.AppStart.Services
 {
-    using CodeChallenger.Saldo.Adapters.Repository.Query.ListarOperacoes;
     using CodeChallenger.Saldo.Adapters.Repository.Query.RecuperarOperacao;
-    using CodeChallenger.Saldo.Application.UseCases.RealizarOperacao;
+    using CodeChallenger.Saldo.Application.UseCases.Login;
     using Serilog;
     using System.Diagnostics;
 
@@ -18,7 +17,7 @@
                 builder.Services.AddMediatR(opt =>
                 {
                     opt.RegisterServicesFromAssemblyContaining(typeof(Program));
-                    opt.RegisterServicesFromAssemblyContaining<RealizarOperacaoHandler>();
+                    opt.RegisterServicesFromAssemblyContaining<LoginHandler>();
                     opt.RegisterServicesFromAssemblyContaining<RecuperarOperacaoQueryHandler>();
                 });
             }

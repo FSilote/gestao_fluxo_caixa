@@ -13,12 +13,14 @@
             builder.Property(x => x.NumeroParcela).IsRequired();
             builder.Property(x => x.TotalParcelas).IsRequired();
             builder.Property(x => x.DataCriacao).IsRequired();
-            builder.Property(x => x.DataRealizacao).IsRequired();
+            builder.Property(x => x.DataPrevista).IsRequired();
+            builder.Property(x => x.DataRealizacao);
             builder.Property(x => x.Identificador).IsRequired();
             builder.Property(x => x.Movimento).IsRequired();
             builder.Property(x => x.ValorParcela).IsRequired();
             builder.Property(x => x.ValorTotal).IsRequired();
-            builder.Property(x => x.Comentario);
+            builder.Property(x => x.Descricao);
+            builder.Property(x => x.Status).IsRequired();
         }
     }
 }

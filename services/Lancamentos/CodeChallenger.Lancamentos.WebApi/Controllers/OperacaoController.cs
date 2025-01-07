@@ -5,6 +5,7 @@ namespace CodeChallenger.Lancamentos.WebApi.Controllers
     using CodeChallenger.Lancamentos.Application.UseCases.ListarOperacoes;
     using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacao;
     using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacaoParcelada;
+    using CodeChallenger.Lancamentos.Application.UseCases.RealizarPagamentoParcela;
     using CodeChallenger.Lancamentos.Application.UseCases.RecuperarOperacao;
     using CodeChallenger.Lancamentos.Domain.Entity;
     using CodeChallenger.Lancamentos.Domain.Exceptions;
@@ -64,6 +65,13 @@ namespace CodeChallenger.Lancamentos.WebApi.Controllers
             var result = await _mediator.Send(request);
 
             return result;
+        }
+
+        [HttpPut("{id}/parcela/pagar")]
+        [Authorize(Policy = Roles.ATENDENTE)]
+        public Task<RealizarPagamentoParcelaResult> RealizarPagamentoParcela([FromRoute] int id)
+        {
+            return _mediator.Send(new RealizarPagamentoParcelaCommand(id));
         }
 
         [HttpPost("saida")]
