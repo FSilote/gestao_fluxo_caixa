@@ -18,7 +18,7 @@ Antes de iniciarmos a avaliação desse Code Challenger, eu gostaria de pedir de
 
 Peço, por gentileza, que avaliem meu projeto mesmo assim, caso possível.
 
-Me encontro à disposição para conversarmos e debatermos as decisões técnicas que tomei ao longo do projeto e minhas alternativas para implementação dos itens faltantes. Acredito que podemos ser mais práticos e produtivos nessa conversa, ao invés de eu tentar descrever nesse texto todas as opções e técnicas que eu poderia abordar para conclusão do projeto.
+Me encontro à disposição para conversarmos e debatermos as decisões técnicas que tomei ao longo do projeto e minhas alternativas para implementação dos itens faltantes. Acredito que tenho boas opções e técnicas para a conclusão do projeto.
 
 Desde já agradeço imensamente pela paciência e pela oportunidade de realizar esse desafio.
 
