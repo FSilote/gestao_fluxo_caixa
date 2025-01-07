@@ -104,6 +104,6 @@ docker container run -d -it --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq
 - Autentique no Swagger utilizando o token recebido no passo anterior
 - Execute as rotas de POST para realizar lançamentos (à vista ou parcelados)
 - Identifique o Swagger da aplicação "Saldo"
-- Execute as rotas de relatório de Saldos
+- Execute as rotas de relatórios e de Saldos (utilize o mesmo token obtido anteriormente para autenticar)
 
 2) Docker Compose
