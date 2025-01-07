@@ -12,7 +12,7 @@ Nesse repositório você encontrará o projeto proposto para o desafio de arquit
 
 ## Introdução
 
-Como não há muitas informações à cerca do situação atual da empresa para que pudesse ser traçado um mapeamento AS-IS da arquitetura corporativa, foram assumidas as seguintes premissas para guiar a construção desse desafio:
+Como não há muitas informações à cerca da situação atual da empresa para que se possa realizar um mapeamento AS-IS da arquitetura corporativa, foram assumidas as seguintes premissas para guiar a construção desse desafio:
 
 -  Nosso cliente possui uma loja com uma operação in loco para venda de artigos de vestuário.
 - Nosso cliente está ampliando sua operação com a abertura de novas lojas e realizará um processo de transformação digital do seu modelo negócios visando alcançar novos mercados por meio de vendas online.

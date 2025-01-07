@@ -1,41 +1,45 @@
 ﻿namespace CodeChallenger.Saldo.WebApi.Background
 {
+    using CodeChallenger.Lancamentos.Application.Events;
     using CodeChallenger.Saldo.Domain.Messaging;
     using MediatR;
-    using Serilog;
+    using Microsoft.Extensions.DependencyInjection;
+    using System.Threading;
 
     public class ConsumerBackgroundService : BackgroundService
     {
-        public ConsumerBackgroundService(IQueueService queueService,
-            IMediator mediator)
+        public ConsumerBackgroundService(IServiceScopeFactory serviceScopeFactory)
         {
-            _mediator = mediator;
-            _queueService = queueService;
+            _scopeFactory = serviceScopeFactory;
         }
 
-        private readonly IQueueService _queueService;
-        private readonly IMediator _mediator;
+        private readonly IServiceScopeFactory _scopeFactory;
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (!stoppingToken.IsCancellationRequested)
+            using (var workerScope = _scopeFactory.CreateScope())
             {
-                try
-                {
-                    await _queueService.CreateQueue("teste");
-                    await _queueService.Subscribe(TopicNames.OPERACOES, "teste");
+                var _queueService = workerScope.ServiceProvider.GetRequiredService<IQueueService>();
+                var _publisherService = workerScope.ServiceProvider.GetRequiredService<IPublisherService>();
+                var _commandFactory = workerScope.ServiceProvider.GetRequiredService<IEventCommandFactory>();
 
-                    await _queueService.ReceiveAsync("teste", async (message) =>
-                    {
-                        Console.WriteLine(message);
-                        await Task.Delay(1000);
-                    });
-                }
-                catch (Exception ex)
+                await _publisherService.CreateTopic(TopicNames.OPERACOES);
+                await _queueService.CreateQueue(QueueNames.OPERACOES, TopicNames.OPERACOES);
+
+                await _queueService.ReceiveAsync(QueueNames.OPERACOES, async (message) =>
                 {
-                    Log.Error(ex, "Error to start Background service.");
-                    await Task.Delay(10000);
-                }
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var _mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+                        var command = _commandFactory.Create(message);
+
+                        if (command != null)
+                        {
+                            await _mediator.Send(command);
+                        }
+                    }
+                }, stoppingToken);
             }
         }
     }

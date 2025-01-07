@@ -30,7 +30,8 @@
                 .SetComentario(request.Comentario)
                 .SetDataRealizacao(request.Data)
                 .SetMovimento(request.GetMovimentoOperacao())
-                .SetValorTotal(request.Valor);
+                .SetValorTotal(request.Valor)
+                .SetValorParcela(request.Valor);
 
             await _writeRepository.SaveOrUpdateAsync<Operacao>(operacao);
 

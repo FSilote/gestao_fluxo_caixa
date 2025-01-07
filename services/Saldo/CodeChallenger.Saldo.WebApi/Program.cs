@@ -20,6 +20,7 @@ builder.ConfigureMessaging();
 builder.ConfigureEncryption();
 builder.ConfigureTokenServices();
 builder.ConfigureBackgroundServices();
+builder.ConfigureEventFactory();
 
 // Build the WebApplication
 var app = builder.Build();

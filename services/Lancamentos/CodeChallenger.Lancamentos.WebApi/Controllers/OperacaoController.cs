@@ -1,17 +1,17 @@
-using Asp.Versioning;
-using CodeChallenger.Lancamentos.Application.UseCases.ExcluirOperacao;
-using CodeChallenger.Lancamentos.Application.UseCases.ListarOperacoes;
-using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacao;
-using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacaoParcelada;
-using CodeChallenger.Lancamentos.Application.UseCases.RecuperarOperacao;
-using CodeChallenger.Lancamentos.Domain.Entity;
-using CodeChallenger.Lancamentos.Domain.Exceptions;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
 namespace CodeChallenger.Lancamentos.WebApi.Controllers
 {
+    using Asp.Versioning;
+    using CodeChallenger.Lancamentos.Application.UseCases.ExcluirOperacao;
+    using CodeChallenger.Lancamentos.Application.UseCases.ListarOperacoes;
+    using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacao;
+    using CodeChallenger.Lancamentos.Application.UseCases.RealizarOperacaoParcelada;
+    using CodeChallenger.Lancamentos.Application.UseCases.RecuperarOperacao;
+    using CodeChallenger.Lancamentos.Domain.Entity;
+    using CodeChallenger.Lancamentos.Domain.Exceptions;
+    using MediatR;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     [ApiController]
     [ApiVersion("1.0")]
     //[Route("v{version:apiVersion}/[controller]")]

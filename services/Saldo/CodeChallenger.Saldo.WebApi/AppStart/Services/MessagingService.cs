@@ -11,9 +11,9 @@
         {
             Debug.WriteLine($"{DateTime.Now.ToLocalTime()}: Loading Messaging...");
 
-            builder.Services.AddSingleton<IRabbitConnectionService, RabbitConnectionService>();
+            builder.Services.AddScoped<IRabbitConnectionService, RabbitConnectionService>();
             builder.Services.AddScoped<IPublisherService, PublisherService>();
-            builder.Services.AddSingleton<IQueueService, QueueService>();
+            builder.Services.AddScoped<IQueueService, QueueService>();
         }
     }
 }

@@ -25,7 +25,12 @@
             NullValueHandling = NullValueHandling.Include
         };
 
-        public async Task<CreateQueueResponse> CreateQueue(string queueName)
+        public Task<CreateQueueResponse> CreateQueue(string queueName)
+        {
+            return this.CreateQueue(queueName, null!);
+        }
+
+        public async Task<CreateQueueResponse> CreateQueue(string queueName, string exchangeNameToSubscribe)
         {
             using (var connection = await _connectionService.CreateConnectionAsync())
             {
@@ -39,6 +44,11 @@
                             autoDelete: false,
                             arguments: null)
                         : await channel.QueueDeclareAsync();
+
+                    if (!string.IsNullOrEmpty(exchangeNameToSubscribe))
+                    {
+                        await channel.QueueBindAsync(queue: result.QueueName, exchange: exchangeNameToSubscribe, routingKey: string.Empty);
+                    }
 
                     return new CreateQueueResponse(result.QueueName, !string.IsNullOrEmpty(result.QueueName));
                 }
@@ -56,7 +66,7 @@
             }
         }
 
-        public async Task ReceiveAsync(string queueName, Action<string> callback)
+        public async Task ReceiveAsync(string queueName, Func<string, Task> callback, CancellationToken cancellationToken)
         {
             using (var connection = await _connectionService.CreateConnectionAsync())
             {
@@ -66,43 +76,21 @@
 
                     consumer.ReceivedAsync += async (model, ea) =>
                     {
-                        byte[] body = ea.Body.ToArray();
+                        var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
 
-                        callback(message);
+                        await callback(message);
 
                         await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
+                        
+                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer, cancellationToken: cancellationToken);
 
-                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer);
-                }
-            }
-        }
-
-        public async Task ReceiveAsync<T>(string queueName, Action<T> callback)
-        {
-            using (var connection = await _connectionService.CreateConnectionAsync())
-            {
-                using (var channel = await _connectionService.CreateChannelAsync(connection))
-                {
-                    var consumer = new AsyncEventingBasicConsumer(channel);
-
-                    consumer.ReceivedAsync += async (model, ea) =>
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        byte[] body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-
-                        var obj = JsonConvert.DeserializeObject<T>(message);
-
-                        if (obj != null)
-                        {
-                            callback(obj);
-                        }
-
-                        await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
-                    };
-
-                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer);
+                        Console.WriteLine("Sleeping 5 seconds...");
+                        await Task.Delay(5000, cancellationToken);
+                    }
                 }
             }
         }

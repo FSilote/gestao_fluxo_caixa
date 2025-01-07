@@ -18,6 +18,7 @@
         {
             var factory = new ConnectionFactory { HostName = "localhost" };
             return factory.CreateConnectionAsync();
+
         }
 
         public async Task<IChannel> CreateChannelAsync(IConnection connection)

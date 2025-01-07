@@ -23,6 +23,17 @@
             NullValueHandling = NullValueHandling.Include
         };
 
+        public async Task CreateTopic(string topicName)
+        {
+            using (var connection = await _connectionService.CreateConnectionAsync())
+            {
+                using (var channel = await _connectionService.CreateChannelAsync(connection))
+                {
+                    await channel.ExchangeDeclareAsync(exchange: topicName, type: ExchangeType.Fanout);
+                }
+            }
+        }
+
         public Task Publish(string topicName, object message)
         {
             return this.Publish(topicName, [message]);
@@ -37,6 +48,8 @@
             {
                 using (var channel = await _connectionService.CreateChannelAsync(connection))
                 {
+                    await channel.ExchangeDeclareAsync(exchange: topicName, type: ExchangeType.Fanout);
+
                     foreach (var message in messages)
                     {
                         var serialized = message is string
@@ -44,8 +57,6 @@
                             : JsonConvert.SerializeObject(message, _jsonSettings);
 
                         var body = Encoding.UTF8.GetBytes(serialized!);
-
-                        await channel.ExchangeDeclareAsync(exchange: topicName, type: ExchangeType.Fanout);
 
                         await channel.BasicPublishAsync(
                             exchange: topicName,

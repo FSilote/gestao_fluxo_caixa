@@ -1,3 +1,6 @@
+using CodeChallenger.Lancamentos.Adapters.Repository.Seed;
+using CodeChallenger.Lancamentos.Domain.Encryption;
+using CodeChallenger.Lancamentos.Domain.Repository;
 using CodeChallenger.Lancamentos.WebApi.AppStart.Middlewares;
 using CodeChallenger.Lancamentos.WebApi.AppStart.Services;
 
@@ -37,6 +40,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var writeRepository = scope.ServiceProvider.GetRequiredService<IWriteRepository>();
+        var sha512Service = scope.ServiceProvider.GetRequiredService<ISha512Service>();
+
+        var seeder = new DataSeeder(writeRepository, sha512Service);
+        await seeder.SeedData();
+    }
 }
 
 app.Run();
