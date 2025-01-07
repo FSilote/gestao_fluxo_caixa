@@ -36,8 +36,10 @@
 
                         if (command != null)
                         {
-                            await _mediator.Send(command);
+                            return await _mediator.Send(command);
                         }
+
+                        return false;
                     }
                 }, stoppingToken);
             }

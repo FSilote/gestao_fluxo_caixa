@@ -7,7 +7,7 @@
     {
         public decimal Valor { get; set; }
         public string? Descricao { get; set; }
-        public Categoria Categoria { get; protected set; }
+        public Categoria Categoria { get; set; }
         public DateTime Data {  get; set; }
         
         private Movimento Movimento { get; set; }

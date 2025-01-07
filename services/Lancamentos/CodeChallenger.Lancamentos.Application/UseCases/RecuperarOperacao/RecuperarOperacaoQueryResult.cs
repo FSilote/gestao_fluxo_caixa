@@ -7,6 +7,7 @@
         public int Id { get; set; }
         public DateTime DataCriacao { get; set; }
         public StatusOperacao Status { get; set; }
+        public Categoria Categoria { get; set; }
         public decimal ValorTotal { get; set; }
         public Movimento Movimento { get; set; }
         public Guid Identificador { get; set; }

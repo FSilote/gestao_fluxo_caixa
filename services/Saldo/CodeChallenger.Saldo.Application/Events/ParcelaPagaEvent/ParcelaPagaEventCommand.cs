@@ -1,9 +1,10 @@
-﻿namespace CodeChallenger.Lancamentos.Domain.Events
+﻿namespace CodeChallenger.Lancamentos.Application.Events.ParcelaPagaEvent
 {
+    using CodeChallenger.Lancamentos.Application.Events.Base;
     using CodeChallenger.Lancamentos.Domain.Entity;
-    using CodeChallenger.Lancamentos.Domain.Events.Base;
+    using System;
 
-    public class ParcelaPagaEvent : AbstractBaseEvent
+    public class ParcelaPagaEventCommand : BaseEventCommand
     {
         public int Id { get; set; }
         public decimal Valor { get; set; }

@@ -27,19 +27,24 @@
         public async Task<RealizarOperacaoResult> Handle(RealizarOperacaoCommand request, CancellationToken cancellationToken)
         {
             var operacao = new Operacao()
+                .SetCategoria(request.Categoria)
                 .SetDescricao(request.Descricao)
+                .SetDataPrevista(request.Data)
                 .SetDataRealizacao(request.Data)
                 .SetMovimento(request.GetMovimentoOperacao())
                 .SetValorTotal(request.Valor)
                 .SetValorParcela(request.Valor)
-                .SetStatus(StatusOperacao.EFETIVADO);
+                .SetStatus(request.Data.Date <= DateTime.UtcNow.Date 
+                    ? StatusOperacao.EFETIVADO 
+                    : StatusOperacao.PREVISTO);
 
             await _writeRepository.SaveOrUpdateAsync<Operacao>(operacao);
 
             await _publisher.Publish(TopicNames.OPERACOES, new OperacaoRegistradaEvent
             {
                 Id = operacao.Id,
-                Comentario = operacao.Descricao,
+                Categoria = request.Categoria,
+                Descricao = operacao.Descricao,
                 TotalParcelas = operacao.TotalParcelas,
                 DataCriacao = operacao.DataCriacao,
                 DataPrevista = operacao.DataPrevista,

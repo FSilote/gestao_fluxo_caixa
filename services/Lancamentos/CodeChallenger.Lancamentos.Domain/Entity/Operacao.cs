@@ -5,6 +5,7 @@
     public class Operacao : AbstractBaseEntity
     {
         public virtual decimal ValorTotal { get; protected set; }
+        public virtual Categoria Categoria { get; protected set; }
         public virtual Movimento Movimento { get; protected set; }
         public virtual StatusOperacao Status { get; protected set; }
         public virtual Guid Identificador { get; protected set; } = Guid.NewGuid();
@@ -20,6 +21,12 @@
         public Operacao SetValorTotal(decimal valor)
         {
             this.ValorTotal = valor;
+            return this;
+        }
+
+        public Operacao SetCategoria(Categoria categoria)
+        {
+            this.Categoria = categoria;
             return this;
         }
 
@@ -82,7 +89,7 @@
         #region Support
 
         public static IEnumerable<Operacao> DefinirOperacesParceladas(decimal valorTotal, Movimento movimento,
-            DateTime data, int numeroDeParcelas, string? descricao)
+            DateTime data, int numeroDeParcelas, string? descricao, Categoria categoria)
         {
             var identificador = Guid.NewGuid();
             var valorParcela = decimal.Round (valorTotal / numeroDeParcelas, 2);
@@ -90,16 +97,17 @@
             var parcelas = Enumerable
                 .Range(1, numeroDeParcelas)
                 .Select(x => new Operacao()
+                    .SetCategoria(categoria)
                     .SetNumeroParcela(x)
                     .SetDescricao($"{descricao} - {x}/{numeroDeParcelas}")
-                    .SetDataRealizacao(x == 1 ? data : null!)
-                    .SetDataPrevista(data.AddMonths(x - 1))
+                    .SetDataRealizacao(x == 1 ? data.Date : null!)
+                    .SetDataPrevista(data.Date.AddMonths(x - 1))
                     .SetIdentificador(identificador)
                     .SetMovimento(movimento)
                     .SetTotalParcelas(numeroDeParcelas)
                     .SetValorParcela(valorParcela)
                     .SetValorTotal(valorTotal)
-                    .SetStatus(x == 1 ? StatusOperacao.EFETIVADO : StatusOperacao.PREVISTO));
+                    .SetStatus(x == 1 && data.Date <= DateTime.UtcNow.Date ? StatusOperacao.EFETIVADO : StatusOperacao.PREVISTO));
 
             var somaParcelas = parcelas.Sum(x => x.ValorParcela);
             

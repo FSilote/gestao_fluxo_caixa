@@ -17,6 +17,7 @@
             builder.Property(x => x.DataRealizacao);
             builder.Property(x => x.Identificador).IsRequired();
             builder.Property(x => x.Movimento).IsRequired();
+            builder.Property(x => x.Categoria).IsRequired();
             builder.Property(x => x.ValorParcela).IsRequired();
             builder.Property(x => x.ValorTotal).IsRequired();
             builder.Property(x => x.Descricao);

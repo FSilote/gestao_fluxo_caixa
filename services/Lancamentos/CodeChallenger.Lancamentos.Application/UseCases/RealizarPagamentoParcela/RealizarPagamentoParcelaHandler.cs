@@ -29,10 +29,6 @@
         {
             var operacao = await _repository.GetByIdAsync<Operacao>(request.IdParcela);
 
-            _ = operacao
-                .SetDataRealizacao(DateTime.UtcNow)
-                .SetStatus(StatusOperacao.EFETIVADO);
-
             if (operacao is null)
             {
                 throw new NotFoundException("Operacao nao encontrada.");
@@ -43,11 +39,16 @@
                 throw new DomainException("Esta operacao ja foi paga anteriormente.");
             }
 
+            _ = operacao
+                .SetDataRealizacao(DateTime.UtcNow)
+                .SetStatus(StatusOperacao.EFETIVADO);
+
             await _writeRepository.SaveOrUpdateAsync<Operacao>(operacao);
 
             await _publisher.Publish(TopicNames.OPERACOES, new ParcelaPagaEvent
             {
                 Id = operacao.Id,
+                Valor = operacao.ValorParcela,
                 Status = operacao.Status,
                 DataPrevista = operacao.DataPrevista,
                 DataRealizacao = operacao.DataRealizacao

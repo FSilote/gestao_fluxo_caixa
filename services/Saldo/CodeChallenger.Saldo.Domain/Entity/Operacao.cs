@@ -7,6 +7,7 @@
     {
         public virtual decimal ValorTotal { get; protected set; }
         public virtual Movimento Movimento { get; protected set; }
+        public virtual Categoria Categoria { get; protected set; }
         public virtual StatusOperacao Status { get; protected set; }
         public virtual Guid Identificador { get; protected set; } = Guid.NewGuid();
         public virtual int TotalParcelas { get; protected set; } = 1;
@@ -36,6 +37,12 @@
         public Operacao SetStatus(StatusOperacao status)
         {
             this.Status = status;
+            return this;
+        }
+
+        public Operacao SetCategoria(Categoria categoria)
+        {
+            this.Categoria = categoria;
             return this;
         }
 

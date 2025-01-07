@@ -9,6 +9,7 @@
         public DateTime DataCriacao { get; set; }
         public decimal ValorTotal { get; set; }
         public Movimento Movimento { get; set; }
+        public Categoria Categoria { get; set; }
         public StatusOperacao Status { get; set; }
         public Guid Identificador { get; set; }
         public int TotalParcelas { get; set; }
@@ -17,6 +18,6 @@
         public DateTime DataPrevista { get; set; }
         public DateTime? DataRealizacao { get; set; }
         public bool PossuiParcelamento { get => this.TotalParcelas > 1; }
-        public string Comentario { get; set; } = null!;
+        public string Descricao { get; set; } = null!;
     }
 }

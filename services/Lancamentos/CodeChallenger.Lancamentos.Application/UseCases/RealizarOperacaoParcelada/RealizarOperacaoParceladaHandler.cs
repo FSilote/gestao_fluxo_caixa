@@ -7,6 +7,7 @@
     using MediatR;
     using Serilog;
     using System.Collections.Generic;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     public class RealizarOperacaoParceladaHandler : IRequestHandler<RealizarOperacaoParceladaCommand, IEnumerable<RealizarOperacaoParceladaResult>>
@@ -27,10 +28,11 @@
 
         public async Task<IEnumerable<RealizarOperacaoParceladaResult>> Handle(RealizarOperacaoParceladaCommand request, CancellationToken cancellationToken)
         {
-            var parcelas = Operacao.DefinirOperacesParceladas(request.Valor, request.Movimento, 
-                request.DataPrimeiraParcela, request.TotalParcelas, request.Descricao);
+            var parcelas = Operacao.DefinirOperacesParceladas(request.Valor, request.GetMovimentoOperacao(), 
+                request.DataPrimeiraParcela, request.TotalParcelas, request.Descricao, request.Categoria);
 
             var events = new List<OperacaoRegistradaEvent>();
+            var result = new List<RealizarOperacaoParceladaResult>();
 
             foreach (var parcela in parcelas)
             {
@@ -39,7 +41,8 @@
                 events.Add(new OperacaoRegistradaEvent
                 {
                     Id = parcela.Id,
-                    Comentario = parcela.Descricao,
+                    Categoria = parcela.Categoria,
+                    Descricao = parcela.Descricao,
                     TotalParcelas = parcela.TotalParcelas,
                     DataCriacao = parcela.DataCriacao,
                     DataRealizacao = parcela.DataRealizacao,
@@ -51,6 +54,18 @@
                     ValorTotal = parcela.ValorTotal,
                     Status = parcela.Status,
                 });
+
+                result.Add(new RealizarOperacaoParceladaResult
+                {
+                    DataPrevista = parcela.DataPrevista,
+                    DataRealizacao = parcela.DataRealizacao,
+                    Id = parcela.Id,
+                    Identificador = parcela.Identificador,
+                    NumeroParcela = parcela.NumeroParcela,
+                    TotalParcelas = parcela.TotalParcelas,
+                    ValorParcela = parcela.ValorParcela,
+                    ValorTotal = parcela.ValorTotal
+                });
             }
 
             foreach(var ev in events)
@@ -58,17 +73,7 @@
                 await _publisher.Publish(TopicNames.OPERACOES, ev);
             }
 
-            return parcelas.Select(x => new RealizarOperacaoParceladaResult
-            {
-                DataPrevista = x.DataPrevista,
-                DataRealizacao = x.DataRealizacao,
-                Id = x.Id,
-                Identificador = x.Identificador,
-                NumeroParcela = x.NumeroParcela,
-                TotalParcelas = x.TotalParcelas,
-                ValorParcela = x.ValorParcela,
-                ValorTotal = x.ValorTotal
-            });
+            return result;
         }
     }
 }

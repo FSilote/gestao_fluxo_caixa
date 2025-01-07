@@ -66,7 +66,7 @@
             }
         }
 
-        public async Task ReceiveAsync(string queueName, Func<string, Task> callback, CancellationToken cancellationToken)
+        public async Task ReceiveAsync(string queueName, Func<string, Task<bool>> callback, CancellationToken cancellationToken)
         {
             using (var connection = await _connectionService.CreateConnectionAsync())
             {
@@ -79,9 +79,16 @@
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
 
-                        await callback(message);
+                        var success = await callback(message);
 
-                        await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
+                        if (success)
+                        {
+                            await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
+                        }
+                        else
+                        {
+                            await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
+                        }
                     };
                         
                     await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer, cancellationToken: cancellationToken);

@@ -67,7 +67,7 @@ namespace CodeChallenger.Lancamentos.WebApi.Controllers
             return result;
         }
 
-        [HttpPut("{id}/parcela/pagar")]
+        [HttpPut("parcela/{id}/pagar")]
         [Authorize(Policy = Roles.ATENDENTE)]
         public Task<RealizarPagamentoParcelaResult> RealizarPagamentoParcela([FromRoute] int id)
         {

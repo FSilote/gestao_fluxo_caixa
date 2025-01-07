@@ -22,6 +22,7 @@
                     where r.Id == request.Id
                     select new RecuperarOperacaoQueryResult
                     {
+                        Categoria = r.Categoria,
                         Descricao = r.Descricao ?? null!,
                         DataCriacao = r.DataCriacao,
                         DataPrevista = r.DataPrevista,
