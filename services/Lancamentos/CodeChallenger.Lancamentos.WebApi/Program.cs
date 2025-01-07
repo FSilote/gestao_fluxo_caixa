@@ -45,6 +45,9 @@ if (app.Environment.IsDevelopment())
 
         var seeder = new DataSeeder(writeRepository, sha512Service);
         await seeder.SeedData();
+
+        // Apenas para dar tempo do consumidor startar...
+        await Task.Delay(3000);
     }
 }
 
