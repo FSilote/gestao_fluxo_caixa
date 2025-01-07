@@ -5,8 +5,8 @@
     public interface IQueueService
     {
         Task<CreateQueueResponse> CreateQueue(string queueName);
+        Task<CreateQueueResponse> CreateQueue(string queueName, string exchangeNameToSubscribe);
         Task Subscribe(string topicName, string queueName);
-        Task ReceiveAsync(string queueName, Action<string> callback);
-        Task ReceiveAsync<T>(string queueName, Action<T> callback);
+        Task ReceiveAsync(string queueName, Func<string, Task<bool>> callback, CancellationToken cancellationToken);
     }
 }

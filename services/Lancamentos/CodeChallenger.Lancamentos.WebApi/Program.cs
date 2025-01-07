@@ -1,5 +1,6 @@
 using CodeChallenger.Lancamentos.Adapters.Repository.Seed;
 using CodeChallenger.Lancamentos.Domain.Encryption;
+using CodeChallenger.Lancamentos.Domain.Messaging;
 using CodeChallenger.Lancamentos.Domain.Repository;
 using CodeChallenger.Lancamentos.WebApi.AppStart.Middlewares;
 using CodeChallenger.Lancamentos.WebApi.AppStart.Services;
@@ -43,11 +44,14 @@ if (app.Environment.IsDevelopment())
         var writeRepository = scope.ServiceProvider.GetRequiredService<IWriteRepository>();
         var sha512Service = scope.ServiceProvider.GetRequiredService<ISha512Service>();
 
+        var _queueService = scope.ServiceProvider.GetRequiredService<IQueueService>();
+        var _publisherService = scope.ServiceProvider.GetRequiredService<IPublisherService>();
+
+        await _publisherService.CreateTopic(TopicNames.OPERACOES);
+        await _queueService.CreateQueue(QueueNames.OPERACOES, TopicNames.OPERACOES);
+
         var seeder = new DataSeeder(writeRepository, sha512Service);
         await seeder.SeedData();
-
-        // Apenas para dar tempo do consumidor startar...
-        await Task.Delay(3000);
     }
 }
 

@@ -19,12 +19,6 @@
 
         private readonly IRabbitConnectionService _connectionService;
 
-        private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            NullValueHandling = NullValueHandling.Include
-        };
-
         public Task<CreateQueueResponse> CreateQueue(string queueName)
         {
             return this.CreateQueue(queueName, null!);

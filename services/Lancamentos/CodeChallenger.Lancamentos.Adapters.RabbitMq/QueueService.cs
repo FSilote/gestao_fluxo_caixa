@@ -19,13 +19,12 @@
 
         private readonly IRabbitConnectionService _connectionService;
 
-        private JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        public Task<CreateQueueResponse> CreateQueue(string queueName)
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            NullValueHandling = NullValueHandling.Include
-        };
+            return this.CreateQueue(queueName, null!);
+        }
 
-        public async Task<CreateQueueResponse> CreateQueue(string queueName)
+        public async Task<CreateQueueResponse> CreateQueue(string queueName, string exchangeNameToSubscribe)
         {
             using (var connection = await _connectionService.CreateConnectionAsync())
             {
@@ -39,6 +38,11 @@
                             autoDelete: false,
                             arguments: null)
                         : await channel.QueueDeclareAsync();
+
+                    if (!string.IsNullOrEmpty(exchangeNameToSubscribe))
+                    {
+                        await channel.QueueBindAsync(queue: result.QueueName, exchange: exchangeNameToSubscribe, routingKey: string.Empty);
+                    }
 
                     return new CreateQueueResponse(result.QueueName, !string.IsNullOrEmpty(result.QueueName));
                 }
@@ -56,7 +60,7 @@
             }
         }
 
-        public async Task ReceiveAsync(string queueName, Action<string> callback)
+        public async Task ReceiveAsync(string queueName, Func<string, Task<bool>> callback, CancellationToken cancellationToken)
         {
             using (var connection = await _connectionService.CreateConnectionAsync())
             {
@@ -66,43 +70,28 @@
 
                     consumer.ReceivedAsync += async (model, ea) =>
                     {
-                        byte[] body = ea.Body.ToArray();
+                        var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
 
-                        callback(message);
+                        var success = await callback(message);
 
-                        await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
-                    };
-
-                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer);
-                }
-            }
-        }
-
-        public async Task ReceiveAsync<T>(string queueName, Action<T> callback)
-        {
-            using (var connection = await _connectionService.CreateConnectionAsync())
-            {
-                using (var channel = await _connectionService.CreateChannelAsync(connection))
-                {
-                    var consumer = new AsyncEventingBasicConsumer(channel);
-
-                    consumer.ReceivedAsync += async (model, ea) =>
-                    {
-                        byte[] body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-
-                        var obj = JsonConvert.DeserializeObject<T>(message);
-
-                        if (obj != null)
+                        if (success)
                         {
-                            callback(obj);
+                            await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
                         }
-
-                        await channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false);
+                        else
+                        {
+                            await channel.BasicNackAsync(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
+                        }
                     };
 
-                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer);
+                    await channel.BasicConsumeAsync(queueName, autoAck: false, consumer: consumer, cancellationToken: cancellationToken);
+
+                    while (!cancellationToken.IsCancellationRequested)
+                    {
+                        Console.WriteLine("Sleeping 5 seconds...");
+                        await Task.Delay(5000, cancellationToken);
+                    }
                 }
             }
         }
